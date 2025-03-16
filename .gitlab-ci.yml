@@ -41,7 +41,7 @@ image: $FEDORA_IMAGE
 
 .build_one_driver_template: &build_one_driver
   script:
-    # Build with a driver that doesn't need imaging, or nss
+    # Build with a driver that doesn't need imaging, or openssl
     - meson setup _build --werror -Ddrivers=$driver
     - meson compile -C _build
     - rm -rf _build/

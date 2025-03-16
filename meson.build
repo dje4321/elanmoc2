@@ -185,7 +185,7 @@ driver_helper_mapping = {
     'aes2660' : [ 'aeslib', 'aesx660' ],
     'aes3500' : [ 'aeslib', 'aes3k' ],
     'aes4000' : [ 'aeslib', 'aes3k' ],
-    'uru4000' : [ 'nss' ],
+    'uru4000' : [ 'openssl' ],
     'elanspi' : [ 'udev' ],
     'virtual_image'          : [ 'virtual' ],
     'virtual_device'         : [ 'virtual' ],
@@ -242,13 +242,13 @@ foreach i : driver_helpers
 
         libfprint_conf.set10('HAVE_PIXMAN', true)
         optional_deps += imaging_dep
-    elif i == 'nss'
-        nss_dep = dependency('nss', required: false)
-        if not nss_dep.found()
-            error('nss is required for @0@ and possibly others'.format(driver))
+    elif i == 'openssl'
+        openssl_dep = dependency('openssl', version: '>= 3.0', required: false)
+        if not openssl_dep.found()
+            error('OpenSSL is required for @0@ and possibly others'.format(driver))
         endif
 
-        optional_deps += nss_dep
+        optional_deps += openssl_dep
     elif i == 'udev'
         install_udev_rules = true
 

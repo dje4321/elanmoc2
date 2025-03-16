@@ -22,7 +22,7 @@
     libX11-devel
     libXv-devel
     meson
-    nss-devel
+    openssl-devel
     pixman-devel
     python3-cairo
     python3-gobject
@@ -40,7 +40,7 @@
       glibc \
       libgusb \
       libusb \
-      nss \
+      openssl \
       pixman
 
     git clone https://github.com/martinpitt/umockdev.git && \

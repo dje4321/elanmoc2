@@ -1,2 +1,2 @@
 variables:
-  LIBFPRINT_IMAGE_TAG: v3
+  LIBFPRINT_IMAGE_TAG: v4
