@@ -116,6 +116,9 @@ fpi_device_retry_new (FpDeviceRetry error)
     case FP_DEVICE_RETRY_REMOVE_FINGER:
       msg = "Please try again after removing the finger first.";
       break;
+    case FP_DEVICE_RETRY_TOO_FAST:
+      msg = "The swipe was too fast, please try again.";
+      break;
 
     default:
       g_warning ("Unsupported error, returning general error instead!");
