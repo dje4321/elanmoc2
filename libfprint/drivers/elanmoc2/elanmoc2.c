@@ -549,7 +549,7 @@ elanmoc2_identify_verify_report (FpDevice *device, FpPrint *print,
             }
           fp_info ("Identify: no match");
         }
-      fpi_device_identify_report (device, NULL, NULL, *error);
+      fpi_device_identify_report (device, NULL, NULL, g_steal_pointer (error));
       return TRUE;
     }
   else
@@ -572,7 +572,7 @@ elanmoc2_identify_verify_report (FpDevice *device, FpPrint *print,
               print = NULL;
             }
         }
-      fpi_device_verify_report (device, result, print, *error);
+      fpi_device_verify_report (device, result, print, g_steal_pointer (error));
       return result != FPI_MATCH_FAIL;
     }
 }
