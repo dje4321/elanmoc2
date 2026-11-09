@@ -572,6 +572,8 @@ elanmoc2_identify_verify_report (FpDevice *device, FpPrint *print,
               print = NULL;
             }
         }
+      if (*error != NULL)
+        result = FPI_MATCH_ERROR;
       fpi_device_verify_report (device, result, print, g_steal_pointer (error));
       return result != FPI_MATCH_FAIL;
     }
@@ -653,10 +655,24 @@ elanmoc2_identify_run_state (FpiSsm *ssm, FpDevice *device)
         if (error != NULL)
           {
             fp_info ("Identify failed: %s", error->message);
-            if (can_retry)
+            if (g_error_matches (error, FP_DEVICE_ERROR,
+                                 FP_DEVICE_ERROR_DATA_NOT_FOUND))
               {
+                /* The sensor did not match any enrolled finger. This is a
+                 * regular "no match" result, not a device error, so that
+                 * fprintd and PAM let the user try again. */
+                g_clear_error (&error);
                 elanmoc2_identify_verify_report (device, NULL, &error);
-                fpi_ssm_jump_to_state (ssm, IDENTIFY_IDENTIFY);
+                elanmoc2_identify_verify_complete (device, NULL);
+                fpi_ssm_mark_completed (g_steal_pointer (&self->ssm));
+              }
+            else if (can_retry)
+              {
+                /* Only one result may be reported per action: report the
+                 * retry error and complete, fprintd restarts the scan. */
+                elanmoc2_identify_verify_report (device, NULL, &error);
+                elanmoc2_identify_verify_complete (device, NULL);
+                fpi_ssm_mark_completed (g_steal_pointer (&self->ssm));
               }
             else
               {
